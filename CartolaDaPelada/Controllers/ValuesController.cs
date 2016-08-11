@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CartolaDaPelada.Controllers
@@ -13,6 +10,7 @@ namespace CartolaDaPelada.Controllers
         [HttpGet]
         public IEnumerable<string> Get()
         {
+            var xico = 3;
             return new string[] { "value1", "value2" };
         }
 
