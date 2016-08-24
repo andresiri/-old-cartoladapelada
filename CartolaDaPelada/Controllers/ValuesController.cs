@@ -1,17 +1,32 @@
-﻿using System.Collections.Generic;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using Domain.Entities;
+using Domain.Services;
 
 namespace CartolaDaPelada.Controllers
 {
     [Route("api/[controller]")]
     public class ValuesController : Controller
     {
+        private readonly IUserService _userService;
+
+        public ValuesController(IUserService userService)
+        {
+            _userService = userService;
+        }
+
         // GET api/values
         [HttpGet]
-        public IEnumerable<string> Get()
+        public User Get()
         {
-            var xico = 3;
-            return new string[] { "value1", "value2" };
+            var xico = new User();
+            xico.FirstName = "Andre";
+            xico.LastName = "Miranda";
+            xico.Email = "andremirannda@gmail.com";
+            xico.Password = "andresiri";
+
+            xico = _userService.Create(xico);
+
+            return xico;
         }
 
         // GET api/values/5

@@ -1,10 +1,14 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using Business.Services;
+using Domain.Repository;
+using Domain.Services;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Repositorio.Contexto;
+using Repositorio.Repositories;
 
 namespace CartolaDaPelada
 {
@@ -28,7 +32,9 @@ namespace CartolaDaPelada
         {
             var connectionString = Configuration["Postgres:ConnectionString"];
             // var connectionString = "User ID=postgres;Password=root;Host=localhost;Port=5432;Database=talaoEletronico;Pooling=true;";
-            services.AddDbContext<Context>(options => options.UseNpgsql(connectionString, b => b.MigrationsAssembly("CartolaDaPelada")));            
+            services.AddDbContext<Context>(options => options.UseNpgsql(connectionString, b => b.MigrationsAssembly("CartolaDaPelada")));
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IUserService, UserService>();
             // Add framework services.
             services.AddMvc();
         }

@@ -16,7 +16,8 @@
     "Microsoft.Extensions.Logging.Debug": "1.0.0",
     "Microsoft.Extensions.Options.ConfigurationExtensions": "1.0.0",
     "Domain": "1.0.0-*",
-    "Repositorio": "1.0.0-*"
+    "Repositorio": "1.0.0-*",
+    "Business": "1.0.0-*"
   },
 
   "tools": {
