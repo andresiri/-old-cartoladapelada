@@ -21,11 +21,16 @@ namespace CartolaDaPelada.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnName("id");
 
+                    b.Property<int>("CreatedByUserId")
+                        .HasColumnName("createdByUserId");
+
                     b.Property<string>("Description")
                         .HasColumnName("description")
                         .HasAnnotation("MaxLength", 50);
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CreatedByUserId");
 
                     b.ToTable("pelada");
                 });
@@ -69,6 +74,15 @@ namespace CartolaDaPelada.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("user");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Pelada", b =>
+                {
+                    b.HasOne("Domain.Entities.User", "User")
+                        .WithMany("Peladas")
+                        .HasForeignKey("CreatedByUserId")
+                        .HasConstraintName("ForeignKey_Pelada_User")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
         }
     }

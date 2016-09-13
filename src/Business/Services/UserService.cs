@@ -1,23 +1,42 @@
 ﻿using Domain.Entities;
 using Domain.Repository;
 using Domain.Services;
+using Repositorio.Transaction;
+using System;
 
 namespace Business.Services
 {
     public class UserService : IUserService
-    {
-        private readonly IUserRepository _userRepository;
+    {        
+        private readonly IUnitOfWork _unitOfWork;
 
-        public UserService(IUserRepository userRepository)
-        {
-            _userRepository = userRepository;
+        public UserService(IUnitOfWork unitOfWork)
+        {            
+            _unitOfWork = unitOfWork;
         }
 
         public User Create(User obj)
         {
-            var newUser = _userRepository.Create(obj);
+            try
+            {
+                obj.Validate();
 
-            return newUser;
+                var existentUser = _unitOfWork.UserRepository.GetByEmailAddress(obj.Email);
+
+                if (existentUser != null)
+                {
+                    throw new Exception("Email already in use.");
+                }
+
+                var newUser = _unitOfWork.UserRepository.Create(obj);
+                _unitOfWork.Save();
+
+                return newUser;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }            
         }
     }
 }

@@ -41,6 +41,8 @@ namespace Repositorio.Contexto
                 b.HasKey(p => p.Id);
                 b.Property(p => p.Id).HasColumnName("id");
                 b.Property(p => p.Description).HasColumnName("description").HasMaxLength(50);
+                b.Property(p => p.CreatedByUserId).HasColumnName("createdByUserId");
+                b.HasOne(p => p.User).WithMany(p => p.Peladas).HasForeignKey(p => p.CreatedByUserId).HasConstraintName("ForeignKey_Pelada_User");
             });
         }
     }

@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Repositorio.Contexto;
 using Repositorio.Repositories;
+using Repositorio.Transaction;
 
 namespace CartolaDaPelada
 {
@@ -33,8 +34,10 @@ namespace CartolaDaPelada
             var connectionString = Configuration["Postgres:ConnectionString"];
             // var connectionString = "User ID=postgres;Password=root;Host=localhost;Port=5432;Database=talaoEletronico;Pooling=true;";
             services.AddDbContext<Context>(options => options.UseNpgsql(connectionString, b => b.MigrationsAssembly("CartolaDaPelada")));
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IPeladaService, PeladaService>();
             // Add framework services.
             services.AddMvc();
         }

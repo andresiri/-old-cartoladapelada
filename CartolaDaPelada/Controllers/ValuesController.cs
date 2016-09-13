@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Domain.Entities;
 using Domain.Services;
 
 namespace CartolaDaPelada.Controllers
@@ -16,17 +15,9 @@ namespace CartolaDaPelada.Controllers
 
         // GET api/values
         [HttpGet]
-        public User Get()
+        public JsonResult Get()
         {
-            var xico = new User();
-            xico.FirstName = "Andre";
-            xico.LastName = "Miranda";
-            xico.Email = "andremirannda@gmail.com";
-            xico.Password = "andresiri";
-
-            xico = _userService.Create(xico);
-
-            return xico;
+            return Json("xico");
         }
 
         // GET api/values/5
@@ -40,6 +31,7 @@ namespace CartolaDaPelada.Controllers
         [HttpPost]
         public void Post([FromBody]string value)
         {
+            var xico = 2;
         }
 
         // PUT api/values/5

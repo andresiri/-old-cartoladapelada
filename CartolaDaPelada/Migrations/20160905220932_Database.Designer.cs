@@ -8,8 +8,8 @@ using Repositorio.Contexto;
 namespace CartolaDaPelada.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20160824002004_database")]
-    partial class database
+    [Migration("20160905220932_Database")]
+    partial class Database
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -22,11 +22,16 @@ namespace CartolaDaPelada.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnName("id");
 
+                    b.Property<int>("CreatedByUserId")
+                        .HasColumnName("createdByUserId");
+
                     b.Property<string>("Description")
                         .HasColumnName("description")
                         .HasAnnotation("MaxLength", 50);
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CreatedByUserId");
 
                     b.ToTable("pelada");
                 });
@@ -70,6 +75,15 @@ namespace CartolaDaPelada.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("user");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Pelada", b =>
+                {
+                    b.HasOne("Domain.Entities.User", "User")
+                        .WithMany("Peladas")
+                        .HasForeignKey("CreatedByUserId")
+                        .HasConstraintName("ForeignKey_Pelada_User")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
         }
     }

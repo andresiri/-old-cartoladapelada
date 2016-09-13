@@ -1,4 +1,6 @@
-﻿namespace Domain.Entities
+﻿using System.Collections.Generic;
+
+namespace Domain.Entities
 {
     public class User
     {
@@ -10,5 +12,12 @@
         public string Nickname { get; set; }
         public byte Number { get; set; }
         public string Position { get; set; }
+
+        public List<Pelada> Peladas { get; set; }
+
+        public void Validate()
+        {
+
+        }
     }
 }
