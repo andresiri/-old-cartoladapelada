@@ -1,8 +1,7 @@
 ﻿namespace Domain.Entities
 {
-    public class Pelada
-    {
-        public int Id { get; set; }
+    public class Pelada : BaseEntity
+    {        
         public string Description { get; set; }
 
         public int CreatedByUserId { get; set; }

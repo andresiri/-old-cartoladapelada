@@ -1,5 +1,8 @@
 ﻿using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
+using System;
+using System.Linq;
 
 namespace Repositorio.Contexto
 {
@@ -30,6 +33,7 @@ namespace Repositorio.Contexto
                 b.Property(u => u.Nickname).HasMaxLength(100).HasColumnName("nickname");
                 b.Property(u => u.Number).HasColumnName("number");
                 b.Property(u => u.Position).HasMaxLength(100).HasColumnName("position");
+                b.Property(u => u.CreatedAt).IsRequired().HasColumnName("createdAt");
             });
         }
 
@@ -42,8 +46,24 @@ namespace Repositorio.Contexto
                 b.Property(p => p.Id).HasColumnName("id");
                 b.Property(p => p.Description).HasColumnName("description").HasMaxLength(50);
                 b.Property(p => p.CreatedByUserId).HasColumnName("createdByUserId");
+                b.Property(p => p.CreatedAt).IsRequired().HasColumnName("createdAt");
                 b.HasOne(p => p.User).WithMany(p => p.Peladas).HasForeignKey(p => p.CreatedByUserId).HasConstraintName("ForeignKey_Pelada_User");
             });
+        }
+
+        public override int SaveChanges()
+        {
+            var modifiedEntries = ChangeTracker.Entries<BaseEntity>().Where(e => e.State == EntityState.Added || e.State == EntityState.Modified);
+
+            foreach (EntityEntry<BaseEntity> entry in modifiedEntries)
+            {                
+                if (entry.State == EntityState.Added)
+                {
+                    entry.Entity.CreatedAt = DateTime.Now;                    
+                }
+            }
+
+            return base.SaveChanges();
         }
     }
 }

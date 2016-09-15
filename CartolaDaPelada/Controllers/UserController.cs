@@ -14,20 +14,13 @@ namespace CartolaDaPelada.Controllers
         {
             _userService = userService;
         }
-
-        // POST api/values
+        
         [HttpPost]
         public JsonResult Post([FromBody]User obj)
         {
             try
-            {
-                var newUser = new User();
-                newUser.Email = "andremirannda@gmail.com";
-                newUser.FirstName = "Andre";
-                newUser.LastName = "Miranda";
-                newUser.Position = "Atacante";
-
-                newUser = _userService.Create(newUser);
+            {                
+                var newUser = _userService.Create(obj);
 
                 return Json(newUser);
             }

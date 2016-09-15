@@ -1,5 +1,5 @@
 ﻿using Domain.Entities;
-using Domain.Repository;
+using Domain.Lib;
 using Domain.Services;
 using Repositorio.Transaction;
 using System;
@@ -27,6 +27,8 @@ namespace Business.Services
                 {
                     throw new Exception("Email already in use.");
                 }
+
+                obj.Password = Password.hash(obj.Password, obj.Email);
 
                 var newUser = _unitOfWork.UserRepository.Create(obj);
                 _unitOfWork.Save();

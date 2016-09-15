@@ -34,10 +34,14 @@ namespace CartolaDaPelada
             var connectionString = Configuration["Postgres:ConnectionString"];
             // var connectionString = "User ID=postgres;Password=root;Host=localhost;Port=5432;Database=talaoEletronico;Pooling=true;";
             services.AddDbContext<Context>(options => options.UseNpgsql(connectionString, b => b.MigrationsAssembly("CartolaDaPelada")));
+
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IUserRepository, UserRepository>();
+
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IPeladaService, PeladaService>();
+            services.AddScoped<ILoginService, LoginService>();
+
             // Add framework services.
             services.AddMvc();
         }
