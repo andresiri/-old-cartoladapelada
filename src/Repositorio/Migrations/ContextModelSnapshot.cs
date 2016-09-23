@@ -1,17 +1,14 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Repositorio.Contexto;
 
-namespace CartolaDaPelada.Migrations
+namespace Repositorio.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20160905220932_Database")]
-    partial class Database
+    partial class ContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.0.0-rtm-21431");
@@ -21,6 +18,9 @@ namespace CartolaDaPelada.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnName("id");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnName("createdAt");
 
                     b.Property<int>("CreatedByUserId")
                         .HasColumnName("createdByUserId");
@@ -36,11 +36,37 @@ namespace CartolaDaPelada.Migrations
                     b.ToTable("pelada");
                 });
 
+            modelBuilder.Entity("Domain.Entities.PeladaUser", b =>
+                {
+                    b.Property<int>("PeladaId")
+                        .HasColumnName("peladaId");
+
+                    b.Property<int>("UserId")
+                        .HasColumnName("userId");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnName("createdAt");
+
+                    b.Property<int>("Id")
+                        .HasColumnName("id");
+
+                    b.HasKey("PeladaId", "UserId");
+
+                    b.HasIndex("PeladaId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("peladaUser");
+                });
+
             modelBuilder.Entity("Domain.Entities.User", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnName("id");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnName("createdAt");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -79,11 +105,23 @@ namespace CartolaDaPelada.Migrations
 
             modelBuilder.Entity("Domain.Entities.Pelada", b =>
                 {
-                    b.HasOne("Domain.Entities.User", "User")
+                    b.HasOne("Domain.Entities.User", "CreatedByUser")
                         .WithMany("Peladas")
                         .HasForeignKey("CreatedByUserId")
-                        .HasConstraintName("ForeignKey_Pelada_User")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasConstraintName("ForeignKey_Pelada_UserId");
+                });
+
+            modelBuilder.Entity("Domain.Entities.PeladaUser", b =>
+                {
+                    b.HasOne("Domain.Entities.Pelada", "Pelada")
+                        .WithMany("PeladaUsers")
+                        .HasForeignKey("PeladaId")
+                        .HasConstraintName("ForeignKey_PeladaUser_PeladaId");
+
+                    b.HasOne("Domain.Entities.User", "User")
+                        .WithMany("PeladaUsers")
+                        .HasForeignKey("UserId")
+                        .HasConstraintName("ForeignKey_PeladaUser_UserId");
                 });
         }
     }

@@ -4,9 +4,9 @@ using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Primitives;
 using Microsoft.Extensions.Options;
 using Domain.Services;
+using Domain.Entities;
 
 namespace CartolaDaPelada.TokenProvider
 {
@@ -47,7 +47,9 @@ namespace CartolaDaPelada.TokenProvider
             var username = context.Request.Form["username"];
             var password = context.Request.Form["password"];
 
-            var identity = await GetIdentity(username, password);
+            var user = _loginService.Login(username, password);
+
+            var identity = await GetIdentity(user);
             if (identity == null)
             {
                 context.Response.StatusCode = 400;
@@ -61,9 +63,8 @@ namespace CartolaDaPelada.TokenProvider
             // You can add other claims here, if you want:
             var claims = new Claim[]
             {
-                new Claim(JwtRegisteredClaimNames.Sub, username),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new Claim(JwtRegisteredClaimNames.Iat, now.ToFileTimeUtc().ToString(), ClaimValueTypes.Integer64)
+                new Claim("id", user.Id.ToString()),
+                new Claim("username", username)                
             };
 
             // Create the JWT and write it to a string
@@ -87,15 +88,13 @@ namespace CartolaDaPelada.TokenProvider
             await context.Response.WriteAsync(JsonConvert.SerializeObject(response, new JsonSerializerSettings { Formatting = Formatting.Indented }));
         }
 
-        private Task<ClaimsIdentity> GetIdentity(StringValues username, StringValues password)
+        private Task<ClaimsIdentity> GetIdentity(User user)
         {
             try
-            {
-                var loginSuccessfull = _loginService.Login(username, password);
-
-                if (loginSuccessfull)
-                {
-                    return Task.FromResult(new ClaimsIdentity(new System.Security.Principal.GenericIdentity(username, "Token"), new Claim[] { }));
+            {                
+                if (user != null)
+                {                    
+                    return Task.FromResult(new ClaimsIdentity(new System.Security.Principal.GenericIdentity(user.Email, "Token"), new Claim[] { }));
                 }
 
                 // Credentials are invalid, or account doesn't exist

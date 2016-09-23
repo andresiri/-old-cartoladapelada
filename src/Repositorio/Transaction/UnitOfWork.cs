@@ -28,7 +28,21 @@ namespace Repositorio.Transaction
 
                 return userRepository;
             }
-        }        
+        }
+
+        private PeladaRepository peladaRepository;
+        public PeladaRepository PeladaRepository
+        {
+            get
+            {
+                if (peladaRepository == null)
+                {
+                    peladaRepository = new PeladaRepository(context);
+                }
+
+                return peladaRepository;
+            }
+        }
 
         private bool disposed = false;
 

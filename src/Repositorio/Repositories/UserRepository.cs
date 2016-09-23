@@ -19,6 +19,23 @@ namespace Repositorio.Repositories
             return user;
         }
 
+        public void Delete(int userId)
+        {
+            var user = GetById(userId);
+
+            if (user != null)
+            {
+                _context.User.Remove(user);
+            }
+        }
+
+        public User GetById(int userId)
+        {
+            var user = _context.User.Where(w => w.Id.Equals(userId)).FirstOrDefault();
+
+            return user;
+        }
+
         public User GetByEmailAddress(string emailAddress)
         {
             emailAddress = emailAddress.Trim();

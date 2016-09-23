@@ -1,4 +1,5 @@
-﻿using Domain.Lib;
+﻿using Domain.Entities;
+using Domain.Lib;
 using Domain.Services;
 using Repositorio.Transaction;
 using System;
@@ -14,7 +15,7 @@ namespace Business.Services
             _unitOfWork = unitOfWork;
         }
 
-        public bool Login(string email, string password)
+        public User Login(string email, string password)
         {
             try
             {
@@ -26,11 +27,11 @@ namespace Business.Services
 
                     if (hashPassword.Equals(user.Password))
                     {
-                        return true;
+                        return user;
                     }
                 }
 
-                return false;
+                return null;
             }
             catch (Exception ex)
             {

@@ -1,9 +1,11 @@
 ﻿using Business.Services;
+using CartolaDaPelada;
 using CartolaDaPelada.TokenProvider;
 using Domain.Repository;
 using Domain.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -27,7 +29,7 @@ namespace CartolaDaPelada
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
                 .AddEnvironmentVariables();           
-            
+
             Configuration = builder.Build();            
         }
 
@@ -42,10 +44,13 @@ namespace CartolaDaPelada
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IPeladaRepository, PeladaRepository>();
 
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IPeladaService, PeladaService>();
             services.AddScoped<ILoginService, LoginService>();
+
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             // Add framework services.
             services.AddMvc();
@@ -54,6 +59,16 @@ namespace CartolaDaPelada
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
+
+            if (env.IsDevelopment())
+            {
+                using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
+                {
+                    serviceScope.ServiceProvider.GetService<Context>().Database.Migrate();                    
+                    serviceScope.ServiceProvider.GetService<Context>().EnsureSeedData();
+                }
+            }
+
             // secretKey contains a secret passphrase only your server knows
             var secretKey = "mysupersecret_secretkey!123";
             var signingKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(secretKey));
@@ -96,8 +111,8 @@ namespace CartolaDaPelada
             app.UseMiddleware<TokenProviderMiddleware>(Options.Create(options));
 
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
-            loggerFactory.AddDebug();         
-
+            loggerFactory.AddDebug();
+            
             app.UseMvc();
         }
     }

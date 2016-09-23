@@ -1,14 +1,12 @@
 ﻿using Domain.Entities;
 using Domain.Services;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 
 namespace CartolaDaPelada.Controllers
 {
-    [Authorize]
     [Route("api/[controller]")]
-    public class UserController : Controller
+    public class UserController : BaseController
     {
         private IUserService _userService;        
 
@@ -20,9 +18,25 @@ namespace CartolaDaPelada.Controllers
         [HttpPost]        
         public JsonResult Post([FromBody]User obj)
         {
-            try
+
+            var user1 = new User
             {
-                var user = HttpContext.User;     
+                Email = "andremirannda@gmail.com",
+                FirstName = "Andre",
+                LastName = "Miranda",
+                Password = "andresiri"
+            };
+
+            var user2 = new User
+            {
+                Email = "heliofeliciano@gmail.com",
+                FirstName = "Helio",
+                LastName = "Feliciano",
+                Password = "andresiri"
+            };
+
+            try
+            {                 
                 var newUser = _userService.Create(obj);
 
                 return Json(newUser);
@@ -31,6 +45,21 @@ namespace CartolaDaPelada.Controllers
             {
                 return Json(ex.Message);
             }
-        }        
+        }
+
+        [HttpDelete("{id}")]
+        public JsonResult Delete([FromRoute]int id)
+        {
+            try
+            {
+                _userService.Delete(id);
+
+                return Json(true);
+            }
+            catch (Exception ex)
+            {
+                return Json(ex);
+            }
+        }
     }
 }

@@ -5,11 +5,11 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Repositorio.Contexto;
 
-namespace CartolaDaPelada.Migrations
+namespace Repositorio.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20160915221209_addedCreatedAtColumn")]
-    partial class addedCreatedAtColumn
+    [Migration("20160923022002_database")]
+    partial class database
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -37,6 +37,29 @@ namespace CartolaDaPelada.Migrations
                     b.HasIndex("CreatedByUserId");
 
                     b.ToTable("pelada");
+                });
+
+            modelBuilder.Entity("Domain.Entities.PeladaUser", b =>
+                {
+                    b.Property<int>("PeladaId")
+                        .HasColumnName("peladaId");
+
+                    b.Property<int>("UserId")
+                        .HasColumnName("userId");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnName("createdAt");
+
+                    b.Property<int>("Id")
+                        .HasColumnName("id");
+
+                    b.HasKey("PeladaId", "UserId");
+
+                    b.HasIndex("PeladaId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("peladaUser");
                 });
 
             modelBuilder.Entity("Domain.Entities.User", b =>
@@ -85,11 +108,23 @@ namespace CartolaDaPelada.Migrations
 
             modelBuilder.Entity("Domain.Entities.Pelada", b =>
                 {
-                    b.HasOne("Domain.Entities.User", "User")
+                    b.HasOne("Domain.Entities.User", "CreatedByUser")
                         .WithMany("Peladas")
                         .HasForeignKey("CreatedByUserId")
-                        .HasConstraintName("ForeignKey_Pelada_User")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasConstraintName("ForeignKey_Pelada_UserId");
+                });
+
+            modelBuilder.Entity("Domain.Entities.PeladaUser", b =>
+                {
+                    b.HasOne("Domain.Entities.Pelada", "Pelada")
+                        .WithMany("PeladaUsers")
+                        .HasForeignKey("PeladaId")
+                        .HasConstraintName("ForeignKey_PeladaUser_PeladaId");
+
+                    b.HasOne("Domain.Entities.User", "User")
+                        .WithMany("PeladaUsers")
+                        .HasForeignKey("UserId")
+                        .HasConstraintName("ForeignKey_PeladaUser_UserId");
                 });
         }
     }

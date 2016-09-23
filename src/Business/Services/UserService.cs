@@ -40,5 +40,18 @@ namespace Business.Services
                 throw ex;
             }            
         }
+
+        public void Delete(int userId)
+        {
+            try
+            {
+                _unitOfWork.UserRepository.Delete(userId);
+                _unitOfWork.Save();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }
