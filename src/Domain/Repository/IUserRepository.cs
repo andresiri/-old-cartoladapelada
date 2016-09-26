@@ -2,9 +2,8 @@
 
 namespace Domain.Repository
 {
-    public interface IUserRepository
-    {
-        User Create(User user);
+    public interface IUserRepository : IBaseRepository<User>
+    {        
         void Delete(int userId);
     }
 }

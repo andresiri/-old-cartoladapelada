@@ -6,6 +6,8 @@ namespace Repositorio.Transaction
     {
         UserRepository UserRepository { get; }
         PeladaRepository PeladaRepository { get; }
+        PeladaUserRepository PeladaUserRepository { get; }
+        ArenaRepository ArenaRepository { get; }
         void Save();
         void Commit();
         void Rollback();        

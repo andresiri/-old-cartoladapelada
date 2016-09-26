@@ -17,6 +17,20 @@ namespace CartolaDaPelada.Controllers
             _peladaService = peladaService;
         }
 
+        [HttpGet("{id}")]
+        public JsonResult Get(int id)
+        {
+            try
+            {
+                var pelada = _peladaService.Read(id);
+                return Json(pelada);
+            }
+            catch (Exception ex)
+            {
+
+                return Json(ex);
+            }
+        }
 
         [HttpPost]
         public JsonResult Post([FromBody]Pelada obj)
@@ -29,7 +43,7 @@ namespace CartolaDaPelada.Controllers
             }
             catch (Exception ex)
             {
-                throw ex;
+                return Json(ex);
             }
         }
         

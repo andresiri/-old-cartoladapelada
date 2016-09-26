@@ -3,6 +3,7 @@ using Domain.Repository;
 using Repositorio.Contexto;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace Repositorio.Repositories
 {
@@ -20,6 +21,12 @@ namespace Repositorio.Repositories
         public IEnumerable<T> GetAll()
         {
             return _context.Set<T>().ToList();
+        }
+
+        public T Create(T obj)
+        {
+            _context.Set<T>().Add(obj);
+            return obj;
         }
     }
 }

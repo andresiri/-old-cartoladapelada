@@ -44,6 +44,34 @@ namespace Repositorio.Transaction
             }
         }
 
+        private PeladaUserRepository peladaUserRepository;
+        public PeladaUserRepository PeladaUserRepository
+        {
+            get
+            {
+                if (peladaUserRepository == null)
+                {
+                    peladaUserRepository = new PeladaUserRepository(context);
+                }
+
+                return peladaUserRepository;
+            }
+        }
+
+        private ArenaRepository arenaRepository;
+        public ArenaRepository ArenaRepository
+        {
+            get
+            {
+                if (arenaRepository == null)
+                {
+                    arenaRepository = new ArenaRepository(context);
+                }
+
+                return arenaRepository;
+            }
+        }
+
         private bool disposed = false;
 
         protected virtual void Dispose(bool disposing)

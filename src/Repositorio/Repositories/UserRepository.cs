@@ -8,16 +8,8 @@ namespace Repositorio.Repositories
     public class UserRepository : BaseRepository<User>, IUserRepository
     {
         public UserRepository(Context context) : base(context)
-        {
-            _context = context;
-        }
-
-        public User Create(User user)
-        {                        
-            _context.User.Add(user);            
-            
-            return user;
-        }
+        {            
+        }       
 
         public void Delete(int userId)
         {

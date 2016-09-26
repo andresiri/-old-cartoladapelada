@@ -45,10 +45,14 @@ namespace CartolaDaPelada
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IPeladaRepository, PeladaRepository>();
+            services.AddScoped<IPeladaUserRepository, PeladaUserRepository>();
+            services.AddScoped<IArenaRepository, ArenaRepository>();
 
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IPeladaService, PeladaService>();
             services.AddScoped<ILoginService, LoginService>();
+            services.AddScoped<IPeladaUserService, PeladaUserService>();
+            services.AddScoped<IArenaService, ArenaService>();
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 

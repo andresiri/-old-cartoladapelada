@@ -14,6 +14,19 @@ namespace Business.Services
             _unitOfWork = unitOfWork;
         }
 
+        public Pelada Read(int id)
+        {
+            try
+            {
+                var pelada = _unitOfWork.PeladaRepository.GetById(id);
+                return pelada;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         public Pelada Create(Pelada obj)
         {
             try

@@ -6,5 +6,6 @@ namespace Domain.Services
     {
         Pelada Create(Pelada obj);
         void Delete(int peladaId);
+        Pelada Read(int peladaId);
     }
 }

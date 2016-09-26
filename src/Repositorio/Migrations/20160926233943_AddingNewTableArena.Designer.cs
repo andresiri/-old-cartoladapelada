@@ -8,13 +8,41 @@ using Repositorio.Contexto;
 namespace Repositorio.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20160923022002_database")]
-    partial class database
+    [Migration("20160926233943_AddingNewTableArena")]
+    partial class AddingNewTableArena
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.0.0-rtm-21431");
+
+            modelBuilder.Entity("Domain.Entities.Arena", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("id");
+
+                    b.Property<DateTime>("CreatedAt");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnName("description")
+                        .HasAnnotation("MaxLength", 100);
+
+                    b.Property<string>("Latitude")
+                        .HasColumnName("latitude")
+                        .HasAnnotation("MaxLength", 30);
+
+                    b.Property<string>("Longitude")
+                        .HasColumnName("longitude")
+                        .HasAnnotation("MaxLength", 30);
+
+                    b.Property<string>("Name");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("arena");
+                });
 
             modelBuilder.Entity("Domain.Entities.Pelada", b =>
                 {
@@ -54,6 +82,8 @@ namespace Repositorio.Migrations
                         .HasColumnName("id");
 
                     b.HasKey("PeladaId", "UserId");
+
+                    b.HasAlternateKey("Id");
 
                     b.HasIndex("PeladaId");
 

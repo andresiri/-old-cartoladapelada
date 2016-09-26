@@ -17,24 +17,7 @@ namespace CartolaDaPelada.Controllers
         
         [HttpPost]        
         public JsonResult Post([FromBody]User obj)
-        {
-
-            var user1 = new User
-            {
-                Email = "andremirannda@gmail.com",
-                FirstName = "Andre",
-                LastName = "Miranda",
-                Password = "andresiri"
-            };
-
-            var user2 = new User
-            {
-                Email = "heliofeliciano@gmail.com",
-                FirstName = "Helio",
-                LastName = "Feliciano",
-                Password = "andresiri"
-            };
-
+        {            
             try
             {                 
                 var newUser = _userService.Create(obj);

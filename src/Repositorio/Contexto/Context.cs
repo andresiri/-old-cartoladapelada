@@ -18,12 +18,15 @@ namespace Repositorio.Contexto
         }        
         public DbSet<User> User { get; set; }
         public DbSet<Pelada> Pelada { get; set; }
+        public DbSet<PeladaUser> PeladaUser { get; set; }
+        public DbSet<Arena> Arena { get; set; }
         
         protected override void OnModelCreating(ModelBuilder builder)
         {
             ConfigureUser(builder);
             ConfigurePelada(builder);
             ConfigurePeladaUser(builder);
+            ConfigureArena(builder);
 
             foreach (var relationship in builder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
             {
@@ -70,6 +73,7 @@ namespace Repositorio.Contexto
             modelBuilder.Entity<PeladaUser>(b =>
             {
                 b.ToTable("peladaUser");
+                b.HasKey(p => p.Id);
                 b.HasKey(p => new { p.PeladaId, p.UserId });                
                 b.Property(p => p.Id).HasColumnName("id");
                 b.Property(p => p.PeladaId).IsRequired().HasColumnName("peladaId");
@@ -77,6 +81,19 @@ namespace Repositorio.Contexto
                 b.Property(p => p.CreatedAt).IsRequired().HasColumnName("createdAt");
                 b.HasOne(p => p.User).WithMany(p => p.PeladaUsers).HasForeignKey(p => p.UserId).HasConstraintName("ForeignKey_PeladaUser_UserId");
                 b.HasOne(p => p.Pelada).WithMany(p => p.PeladaUsers).HasForeignKey(p => p.PeladaId).HasConstraintName("ForeignKey_PeladaUser_PeladaId");
+            });
+        }
+
+        private static void ConfigureArena(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Arena>(b =>
+            {
+                b.ToTable("arena");
+                b.HasKey(a => a.Id);
+                b.Property(a => a.Id).HasColumnName("id");
+                b.Property(a => a.Description).IsRequired().HasMaxLength(100).HasColumnName("description");
+                b.Property(a => a.Latitude).HasMaxLength(30).HasColumnName("latitude");
+                b.Property(a => a.Longitude).HasMaxLength(30).HasColumnName("longitude");
             });
         }
 
