@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using Domain.Entities.Validation;
+using FluentValidation.Results;
+using System.Collections.Generic;
 
 namespace Domain.Entities
 {
@@ -15,9 +17,13 @@ namespace Domain.Entities
         public List<PeladaUser> PeladaUsers { get; set; }
         public List<Pelada> Peladas { get; set; }
 
-        public void Validate()
+        public IList<ValidationFailure> Validate()
         {
+            var validator = new UserValidation();
+            var results = validator.Validate(this);
             
+            var failures = results.Errors;
+            return failures;
         }
     }
 }
